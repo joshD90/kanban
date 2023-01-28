@@ -2,12 +2,16 @@ import "dotenv/config";
 import express, { Request, Response } from "express";
 import session from "express-session";
 import passport from "passport";
+import cors from "cors";
 
 import authRoutes from "./routes/authRoutes";
 import "./utils/localStrat";
 
 //set up express
 const app = express();
+
+//set up cors - credentials true allows up to pass cookies data
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 //set up our passport session middleware.
 app.use(

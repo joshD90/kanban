@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+
+import { AuthContext } from "../context/authContext";
+import { fetchLogin } from "../utils/fetch/fetchLogin";
 
 const Login = () => {
+  const user = useContext(AuthContext);
+  const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
+
+  const changeLoginDetails = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setLoginDetails((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const doLogin = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    console.log("before fetch");
+    const outcome = await fetchLogin(loginDetails, user);
+    console.log("after fetch", outcome);
+  };
+
   return (
     <div className="w-full h-screen bg-stone-800 flex items-center justify-center">
       <div className="w-1/3 min-w-96 border-2 border-stone-50 h-1/3 min-h-96 bg-stone-500 rounded-md">
-        <form className="flex flex-col w-full h-full items-start justify-around p-5">
+        <form
+          onSubmit={doLogin}
+          className="flex flex-col w-full h-full items-start justify-around p-5"
+        >
           <div className="flex flex-col w-full">
             <label htmlFor="email" className="text-stone-700">
               email
             </label>
             <input
+              onChange={changeLoginDetails}
               type="email"
               id="email"
               placeholder="The email you used to sign up"
@@ -19,6 +40,7 @@ const Login = () => {
           <div className="flex flex-col w-full">
             <label className="text-stone-700">password</label>
             <input
+              onChange={changeLoginDetails}
               type="password"
               id="password"
               placeholder="Your Password Here"
