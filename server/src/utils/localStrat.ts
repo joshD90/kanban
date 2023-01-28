@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import { connection } from "../db";
 import { getUser } from "../queries/authQueries";
 
+//this allows for our user interface to be used throughout the server however we add it onto the Express namespace
+//to avoid any conflicts later on
 declare global {
   namespace Express {
     interface User {
@@ -56,7 +58,8 @@ passport.use(
 
         //handle errors or null user
         if (err) return done(err);
-        if (!result) return done(null, false);
+        if (!result || result.length === 0) return done(null, false);
+
         //we need to extract the user information and convert it into a type that matches our express namespace
         const user = {
           id: result[0].id,
