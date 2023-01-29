@@ -75,8 +75,9 @@ passport.use(
           if (error) return done(err);
           if (!data)
             return done(null, false, { message: "Password does not match" });
-
-          return done(null, user);
+          //remove sensitive information
+          const { password, ...rest } = user;
+          return done(null, rest);
         });
       });
     }

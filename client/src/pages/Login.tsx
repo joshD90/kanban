@@ -1,21 +1,25 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../context/authContext";
 import { fetchLogin } from "../utils/fetch/fetchLogin";
 
 const Login = () => {
   const user = useContext(AuthContext);
+  const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
-
+  //do a controlled update of our states
   const changeLoginDetails = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setLoginDetails((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-
+  //do our login functionality
   const doLogin = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log("before fetch");
+    //user is updated in our fetchlogin function but we get the returned boolean to see whether
+    //we should redirect on its completion
     const outcome = await fetchLogin(loginDetails, user);
-    console.log("after fetch", outcome);
+    if (outcome) navigate("/");
+    //if (!outcome)setError() - need to implement this or could do this within our fetchlogin function
   };
 
   return (
