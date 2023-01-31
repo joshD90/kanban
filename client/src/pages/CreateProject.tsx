@@ -1,27 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-type Board = {
+import { AuthContext } from "../context/authContext";
+import { checkBoardCreate } from "../utils/checks/checkBoardCreate";
+import { fetchCreateBoard } from "../utils/fetch/fetchCreateBoard";
+
+export type Board = {
   name: string;
   headers: object;
   participants: string[];
 };
 
 const CreateProject = () => {
+  const user = useContext(AuthContext);
+
   const [participant, setParticipant] = useState("");
   const [header, setHeader] = useState("");
+  //we conditionally add the user email as it has type of null as well as string, we do this using spread syntax
   const [boardDetails, setBoardDetails] = useState<Board>({
     name: "",
     headers: {},
-    participants: [],
+    participants: [...(user?.email ? [user?.email] : [])],
   });
 
   const changeBoardDetails = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setBoardDetails((prev) => ({ ...prev, name: e.target.value }));
   };
-  const createBoard = (e: React.FormEvent): void => {
+
+  const createBoard = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log(boardDetails);
+
+    //check to see whether all fields are filled out first
+    const allFilledOut = checkBoardCreate(boardDetails);
+    if (allFilledOut !== "true") return console.log(allFilledOut);
+    const response = await fetchCreateBoard(boardDetails);
+    console.log(response);
   };
 
   const addHeader = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,6 +50,7 @@ const CreateProject = () => {
 
   //add our particpants into the details array
   const addParticipant = (): void => {
+    //check to see whether the name has already been added
     if (boardDetails.participants.some((name) => name === participant))
       return console.log("Cant add the same person twice");
     setBoardDetails((prev) => ({
@@ -45,6 +59,7 @@ const CreateProject = () => {
     }));
     setParticipant("");
   };
+
   //remove our participant details on click
   const removeParticipant = (e: React.MouseEvent<HTMLSpanElement>): void => {
     setBoardDetails((prev) => {
@@ -117,7 +132,7 @@ const CreateProject = () => {
             </p>
             <div className="flex items-center gap-2">
               <input
-                type="text"
+                type="email"
                 id="participant"
                 placeholder="User's Email"
                 className="p-1 border-none rounded-sm w-full"

@@ -38,10 +38,11 @@ const queryDB = (req: Request, res: Response, queryArray: string[]) => {
 
     //once we have created the table we can insert the user
     connection.query(addUser, queryArray, (error, result) => {
-      if (error)
+      if (error) {
         return res
           .status(500)
           .json("There was an error with trying to create a new user");
+      }
       console.log(result);
       res.status(201).json(result);
     });

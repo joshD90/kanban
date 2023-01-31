@@ -5,6 +5,8 @@ import passport from "passport";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes";
+import boardRoutes from "./routes/boardRoutes";
+
 import "./utils/localStrat";
 
 //set up express
@@ -31,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //router middleware
 app.use("/auth", authRoutes);
+app.use("/boards", boardRoutes);
 
 app.listen(5000, () => {
   console.log("server is listening on port 5000");
