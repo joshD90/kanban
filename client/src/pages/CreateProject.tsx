@@ -38,10 +38,9 @@ const CreateProject = () => {
   };
 
   const addHeader = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const headerNumber = e.target.id.slice(
-      e.target.id.length - 1,
-      e.target.id.length
-    );
+    const numberWords = ["one", "two", "three"];
+    const headerNumber =
+      numberWords[parseInt(e.target.id.slice(e.target.id.length - 1))];
     setBoardDetails((prev) => ({
       ...prev,
       headers: { ...prev.headers, [headerNumber]: e.target.value },
@@ -98,21 +97,21 @@ const CreateProject = () => {
             <input
               onChange={addHeader}
               type="text"
-              id="header1"
+              id="header0"
               placeholder="Panel 1 Header"
               className="p-1 border-none rounded-sm w-full"
             />
             <input
               onChange={addHeader}
               type="text"
-              id="header2"
+              id="header1"
               placeholder="Panel 2 Header"
               className="p-1 border-none rounded-sm w-full"
             />
             <input
               onChange={addHeader}
               type="text"
-              id="header3"
+              id="header2"
               placeholder="Panel 3 Header"
               className="p-1 border-none rounded-sm w-full"
             />

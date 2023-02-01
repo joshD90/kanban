@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
   //get our user from AuthContext
   const auth = useContext(AuthContext);
   //redirect to login page if no user is found
-  // if (!auth?.isLoggedIn) return <Navigate to="/login" replace />;
+  if (!auth?.isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
     <div className="flex">

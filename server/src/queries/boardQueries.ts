@@ -6,7 +6,15 @@
 // board is id, name, panel1, panel2, panel3
 
 export const createBoardTable =
-  "CREATE TABLE IF NOT EXISTS boards (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) UNIQUE NOT NULL, panel1 STRING NOT NULL, panel2 STRING NOT NULL, panel3 STRING NOT NULL, participants )";
+  "CREATE TABLE IF NOT EXISTS boards (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) UNIQUE NOT NULL, panel1 VARCHAR(255) NOT NULL, panel2 VARCHAR(255) NOT NULL, panel3 VARCHAR(255) NOT NULL)";
 
 export const addBoard =
-  "INSERT INTO boards (name, headers, participants) VALUES (?,?,?)";
+  "INSERT INTO boards (name, panel1, panel2, panel3) VALUES (?,?,?,?)";
+
+//create a reference table to facilitate a many to many relationship between boards and users
+export const createBoardUserReference =
+  "CREATE TABLE IF NOT EXISTS user_boards (user_id INT, board_id INT, PRIMARY KEY (user_id, board_id) FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (board_id) REFERENCES boards(id))";
+
+//adding in board reference
+export const addUserBoardRef =
+  "INSERT INTO user_boards (user_id, board_id) VALUES (?,?)";
