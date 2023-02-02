@@ -13,8 +13,8 @@ export const addBoard =
 
 //create a reference table to facilitate a many to many relationship between boards and users
 export const createBoardUserReference =
-  "CREATE TABLE IF NOT EXISTS user_boards (user_id INT, board_id INT, PRIMARY KEY (user_id, board_id) FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (board_id) REFERENCES boards(id))";
+  "CREATE TABLE IF NOT EXISTS user_boards (user_id INT, board_id INT, PRIMARY KEY (user_id, board_id), FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (board_id) REFERENCES boards(id))";
 
 //adding in board reference
 export const addUserBoardRef =
-  "INSERT INTO user_boards (user_id, board_id) VALUES (?,?)";
+  "INSERT INTO user_boards (user_id, board_id) VALUES ?";

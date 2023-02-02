@@ -3,7 +3,7 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import bcrypt from "bcrypt";
 
-import { connection } from "../db";
+import { asyncConn } from "../db";
 import { getUser } from "../queries/authQueries";
 
 //this allows for our user interface to be used throughout the server however we add it onto the Express namespace
@@ -24,22 +24,30 @@ passport.serializeUser((user: Express.User, done): void => {
   done(null, user.email);
 });
 
-passport.deserializeUser((email: string | undefined, done): void => {
-  connection.query(getUser, [email], (err, result: RowDataPacket[]) => {
-    if (err) return done(err, null);
-    if (!result[0]) return done(null, false);
-
-    console.log(result[0]);
-    //we need to extract the user information and convert it into a type that matches our express namespace
-    const user = {
-      id: result[0].id,
-      email: result[0].email,
-      fName: result[0].fName,
-      lName: result[0].lName,
-    };
-    done(err, user);
-  });
-});
+passport.deserializeUser(
+  async (email: string | undefined, done): Promise<void> => {
+    //connect to db
+    const connection = await asyncConn();
+    try {
+      //find our user based on email and if they don't exist throw error
+      const [rows] = await connection.query(getUser, [email]);
+      console.log(rows);
+      if (!rows || rows.length === 0) return done(null, false);
+      console.log(rows, "rows");
+      const user = {
+        id: rows[0].id,
+        email: rows[0].email,
+        fName: rows[0].fName,
+        lName: rows[0].lName,
+      };
+      // create a session object holding our user details on server side
+      return done(null, user);
+    } catch (error) {
+      console.log(error);
+      return done(error, null);
+    }
+  }
+);
 
 //this allows us to configure our local strategy into passport
 //so when we have passport.use('local') it will reference this
@@ -50,36 +58,33 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-    (req, email, password, done) => {
-      console.log(email, password);
-
-      connection.query(getUser, [email], (err, result: RowDataPacket[]) => {
-        console.log(err, result);
-
-        //handle errors or null user
-        if (err) return done(err);
-        if (!result || result.length === 0) return done(null, false);
-
+    async (req, email, suppliedPassword, done): Promise<void> => {
+      const connection = await asyncConn();
+      if (!connection) return done("Could not Connect To DB");
+      try {
+        //find out user by their email
+        const [rows] = await connection.query(getUser, [email]);
+        if (!rows || rows.length === 0) return done(null, false);
         //we need to extract the user information and convert it into a type that matches our express namespace
         const user = {
-          id: result[0].id,
-          email: result[0].email,
-          fName: result[0].fName,
-          lName: result[0].lName,
-          password: result[0].hashedPW,
+          id: rows[0].id,
+          email: rows[0].email,
+          fName: rows[0].fName,
+          lName: rows[0].lName,
+          password: rows[0].hashedPW,
         };
+        //use bcrypt to compare our passwords
+        const data = await bcrypt.compare(suppliedPassword, user.password);
+        if (!data)
+          return done(null, false, { message: "Passwords do not match" });
 
-        // //use bcrypt to compare our passwords
-        bcrypt.compare(password, user.password, (error, data) => {
-          console.log(error, data);
-          if (error) return done(err);
-          if (!data)
-            return done(null, false, { message: "Password does not match" });
-          //remove sensitive information
-          const { password, ...rest } = user;
-          return done(null, rest);
-        });
-      });
+        //extract away sensitve data before passing to req.user object
+        const { password, ...rest } = user;
+        return done(null, rest);
+      } catch (error) {
+        console.log("error");
+        return done(error);
+      }
     }
   )
 );

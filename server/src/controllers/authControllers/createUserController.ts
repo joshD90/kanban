@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
-import { connection } from "../../db";
+import { asyncConn } from "../../db";
 import { createUserTable, addUser } from "../../queries/authQueries";
 //NB we need to add in a check to whether this uer exists already or not
 const createUserController = async (req: Request, res: Response) => {
@@ -28,25 +28,31 @@ const createUserController = async (req: Request, res: Response) => {
   }
 };
 
-const queryDB = (req: Request, res: Response, queryArray: string[]) => {
+//function for actually querying db
+const queryDB = async (req: Request, res: Response, queryArray: string[]) => {
+  const connection = await asyncConn();
+  if (!connection) return res.status(500).json("could not connect to DB ");
   //create a new table if one didn't exist
-  connection.query(createUserTable, (err) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json("There was an error in creating the table");
+  try {
+    if (!connection) throw Error("Could not connect to db");
+    const dbResponse = await connection.query(createUserTable);
+    if (!dbResponse)
+      throw Error("There was no response from DB on Creating User");
+    console.log(dbResponse, "user table created successfully");
+  } catch (error) {
+    if (error instanceof Error) res.status(500).json(error.message);
+  }
+  //once we have created the table then we insert the user
+  try {
+    const result = await connection.query(addUser, queryArray);
+    console.log(result);
+    res.status(201).json(result);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error, "error generated while making new user");
+      res.status(500).json(error.message);
     }
-
-    //once we have created the table we can insert the user
-    connection.query(addUser, queryArray, (error, result) => {
-      if (error) {
-        return res
-          .status(500)
-          .json("There was an error with trying to create a new user");
-      }
-      console.log(result);
-      res.status(201).json(result);
-    });
-  });
+  }
 };
 
 export default createUserController;
