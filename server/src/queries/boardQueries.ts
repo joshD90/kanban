@@ -18,3 +18,6 @@ export const createBoardUserReference =
 //adding in board reference
 export const addUserBoardRef =
   "INSERT INTO user_boards (user_id, board_id) VALUES ?";
+
+export const getAllUserBoards =
+  "SELECT boards.* FROM boards JOIN user_boards ON boards.id = user_boards.board_id JOIN users ON users.id = user_boards.user_id WHERE users.id = ?";
