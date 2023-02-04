@@ -6,49 +6,6 @@ import bcrypt from "bcrypt";
 import { asyncConn } from "../db";
 import { getUser } from "../queries/authQueries";
 
-//this allows for our user interface to be used throughout the server however we add it onto the Express namespace
-//to avoid any conflicts later on
-declare global {
-  namespace Express {
-    interface User {
-      email?: string;
-      id?: string;
-      fName?: string;
-      lName?: string;
-      password?: string;
-    }
-  }
-}
-//tell passport how to create the cookie
-passport.serializeUser((user: Express.User, done): void => {
-  done(null, user.email);
-});
-
-passport.deserializeUser(
-  async (email: string | undefined, done): Promise<void> => {
-    //connect to db
-    const connection = await asyncConn();
-    try {
-      //find our user based on email and if they don't exist throw error
-      const [rows] = await connection.query(getUser, [email]);
-      console.log(rows);
-      if (!rows || rows.length === 0) return done(null, false);
-      console.log(rows, "rows");
-      const user = {
-        id: rows[0].id,
-        email: rows[0].email,
-        fName: rows[0].fName,
-        lName: rows[0].lName,
-      };
-      // create a session object holding our user details on server side
-      return done(null, user);
-    } catch (error) {
-      console.log(error);
-      return done(error, null);
-    }
-  }
-);
-
 //this allows us to configure our local strategy into passport
 //so when we have passport.use('local') it will reference this
 passport.use(

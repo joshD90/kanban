@@ -7,7 +7,7 @@ export const createStoryController = async (
   res: Response
 ): Promise<Response> => {
   const connection = await asyncConn();
-
+  console.log(req.body.description);
   //create our story table intially
   try {
     const newTable = await connection.query(createStoryTable);
@@ -23,7 +23,7 @@ export const createStoryController = async (
   try {
     const [rows] = await connection.query(addStory, [
       req.body.title,
-      req.body.desc,
+      req.body.description,
       req.body.status_panel,
       req.body.board_id,
     ]);

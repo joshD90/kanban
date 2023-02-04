@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import { useDrop } from "react-dnd";
 
 import PanelStory from "./PanelStory";
 import { Story, Board } from "../pages/SingleBoard";
@@ -10,8 +11,23 @@ type Props = {
 };
 
 const Panel: React.FC<Props> = ({ setVis, board, panel }) => {
+  //set this component up to accept dropped components
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "story",
+    drop: () => {
+      console.log(panel, "PANEL accessing");
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      dropResult: monitor.getDropResult(),
+    }),
+  }));
+
   return (
-    <div className="w-full h-1/3 md:w-1/3 bg-stone-200 h-full pb-5 mb-5">
+    <div
+      ref={drop}
+      className="w-full h-1/3 md:w-1/3 bg-stone-200 h-full pb-5 mb-5"
+    >
       <h1 className="w-full flex items-center justify-center bg-stone-500 text-stone-50 p-2 font-bold text-xl">
         {panel === 1 && board.panel1}
         {panel === 2 && board.panel2}
@@ -22,7 +38,7 @@ const Panel: React.FC<Props> = ({ setVis, board, panel }) => {
           {board.stories?.map((story: Story) => {
             if (!story) return;
             if (story?.status_panel !== panel) return;
-            return <PanelStory story={story} />;
+            return <PanelStory story={story} key={story.id} />;
           })}
         </div>
       </div>

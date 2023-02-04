@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -16,7 +18,14 @@ function App() {
         <Route path="/" element={<ProtectedRoute />}>
           <Route index element={<Home />} />
           <Route path="/boards/create" element={<CreateProject />} />
-          <Route path="/boards/:boardId" element={<SingleBoard />} />
+          <Route
+            path="/boards/:boardId"
+            element={
+              <DndProvider backend={HTML5Backend}>
+                <SingleBoard />
+              </DndProvider>
+            }
+          />
         </Route>
       </Routes>
     </Router>

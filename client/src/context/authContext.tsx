@@ -20,6 +20,25 @@ const userInitialState = {
   isLoggedIn: false,
 };
 
+const getUserInitialState = async (): Promise<User> => {
+  // const sessionCookie = document.cookie
+  //   .split("; ")
+  //   .find((row) => row.startsWith("connect.sid="));
+  // console.log(sessionCookie);
+  // if (!sessionCookie) return userInitialState;
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/auth/user-data`;
+    const response = await fetch(url, { credentials: "include" });
+    const userData = await response.json();
+    console.log(userData);
+    return userData;
+  } catch (error) {
+    console.log(error);
+    return userInitialState;
+  }
+};
+getUserInitialState();
+
 export const AuthContext = React.createContext<UserState>({
   ...userInitialState,
   setUser: null,

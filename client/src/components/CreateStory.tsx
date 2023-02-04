@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
+import fetchCreateStory from "../utils/fetch/fetchCreateStory";
+
 type Props = {
   setVis: React.Dispatch<React.SetStateAction<any>>;
   board_id: number;
@@ -24,12 +26,20 @@ const CreateStory: React.FC<Props> = ({ setVis, board_id }) => {
     setStoryDetails((prev) => {
       return { ...prev, [e.target.id]: e.target.value };
     });
-    console.log(storyDetails);
+  };
+
+  const createStory = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    const shouldClose = await fetchCreateStory(storyDetails);
+    if (shouldClose) setVis(false);
   };
 
   return (
     <div className="absolute top-1/2 left-1/2 bg-blue-50 w-96 h-96 -translate-x-2/4 -translate-y-2/4 rounded-md p-5 shadow-md">
-      <form className="h-full flex flex-col gap-2 relative">
+      <form
+        onSubmit={createStory}
+        className="h-full flex flex-col gap-2 relative"
+      >
         <div
           className="w-10 h-10 rounded-full absolute -right-2 -top-2 cursor-pointer flex items-center justify-center"
           onClick={() => setVis(false)}
@@ -53,6 +63,12 @@ const CreateStory: React.FC<Props> = ({ setVis, board_id }) => {
             className="resize-none flex-grow p-2 border-2 border-stone-200 rounded-sm"
           ></textarea>
         </div>
+        <button
+          type="submit"
+          className="p-2 bg-lime-600 hover:bg-lime-500 rounded-sm text-stone-800"
+        >
+          Create Story
+        </button>
       </form>
     </div>
   );

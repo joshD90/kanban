@@ -15,12 +15,11 @@ export const boardGetSingleController = async (
   const connection = await asyncConn();
   try {
     const [rows] = await connection.query(getSingleBoard, [req.params.boardId]);
-    console.log(rows);
+
     //if none can be found
     if (!rows) throw Error("Could not fetch any boards matching this id");
     //parse the stories section of our data as this has been stringified
     const arrayedStories = JSON.parse(`[${rows[0]?.stories}]`);
-    console.log(arrayedStories, "arrayed stories");
     const parsedBoard = { ...rows[0], stories: arrayedStories };
 
     return res.status(200).json(parsedBoard);

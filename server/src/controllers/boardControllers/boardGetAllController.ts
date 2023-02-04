@@ -13,7 +13,6 @@ export const boardGetAllController = async (
   try {
     //uses our reference table in query
     const [row] = await connection.query(getAllUserBoards, [userId]);
-    console.log(row);
     return res.status(200).json(row);
   } catch (error) {
     console.log(error);
