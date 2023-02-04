@@ -16,7 +16,7 @@ export const fetchLogin = async (
     //update our context - setUser can be null at the very outself of setting context so check first
     if (!userObj.setUser) throw Error("There is no user context set up yet");
     //we update our AuthContext through set state, this updates the user
-    userObj.setUser({ ...returnedUser, isLoggedIn: true });
+    userObj.setUser({ ...returnedUser.user, isLoggedIn: true });
     //this function returns true so that the login function knows to navigate to the homepage
     return true;
   } catch (error) {

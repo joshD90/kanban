@@ -15,7 +15,6 @@ export const fetchCreateUser = async (
     //we get the response of 201 if the user has been created return true so that our Login function
     //knows whether to redirect or give an error
     if (response.status === 201) {
-      console.log("Successfully created");
       return true;
     }
     return false;

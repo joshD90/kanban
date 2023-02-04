@@ -1,10 +1,10 @@
 import React, { ReactNode, useState } from "react";
 //set our user for what we can pass to our use state
-type User = {
+export type User = {
   email: string | null;
   fName: string | null;
   lName: string | null;
-  id: Number | null;
+  id: number | null;
   isLoggedIn: boolean;
 };
 //attaches the set state as we need to pass both our use state and user to the context
