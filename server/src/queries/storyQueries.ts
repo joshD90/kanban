@@ -4,3 +4,5 @@ export const createStoryTable =
 
 export const addStory =
   "INSERT INTO stories (title, description, status_panel, board_id) VALUES (?,?,?,?)";
+
+export const updateStory = "UPDATE stories SET ?? = ? WHERE id = ?";

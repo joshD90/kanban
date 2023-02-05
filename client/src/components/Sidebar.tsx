@@ -25,25 +25,24 @@ const Sidebar = () => {
         </div>
         <p>{user?.fName + " " + user?.lName}</p>
       </div>
-      <div className="w-full bg-stone-500 flex items-center p-2 text-stone-50 gap-5 border-bg-stone-50">
-        <Link to="/boards/create">
+      <Link to="/boards/create">
+        <div className="w-full bg-stone-500 flex items-center p-2 text-stone-50 gap-5 border-bg-stone-50">
           <button className="text-bold">
             Create New Project <AddIcon />
           </button>
-        </Link>
-      </div>
+        </div>
+      </Link>
       <div>
         <div className="w-full bg-stone-400 flex items-center p-2 text-stone-50 gap-5">
           <p>Existing Projects</p>
         </div>
         <div className="flex flex-col items-start">
           {boards?.map((board) => (
-            <div
-              className="h-10 text-stone-700 hover:bg-stone-100 p-2 w-full cursor-pointer"
-              key={board.id}
-            >
-              <Link to={`/boards/${board.id}`}>{board.name}</Link>
-            </div>
+            <Link to={`/boards/${board.id}`} className="w-full" key={board.id}>
+              <div className="h-10 text-stone-700 hover:bg-stone-100 p-2 w-full cursor-pointer">
+                {board.name}
+              </div>
+            </Link>
           ))}
         </div>
         <div className="flex absolute bottom-0 w-full bg-stone-500 w-full justify-end text-stone-50 items-center p-2">

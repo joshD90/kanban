@@ -32,9 +32,9 @@ const CreateProject = () => {
 
     //check to see whether all fields are filled out first
     const allFilledOut = checkBoardCreate(boardDetails);
-    if (allFilledOut !== "true") return console.log(allFilledOut);
+    if (allFilledOut !== "true") return;
+    allFilledOut;
     const response = await fetchCreateBoard(boardDetails);
-    console.log(response);
   };
 
   const addHeader = (e: React.ChangeEvent<HTMLInputElement>): void => {

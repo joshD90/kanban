@@ -11,6 +11,7 @@ const PanelStory: React.FC<Props> = ({ story }) => {
   //set up our DND to drag stories
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "story",
+    item: { id: story.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

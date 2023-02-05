@@ -7,7 +7,7 @@ export const createStoryController = async (
   res: Response
 ): Promise<Response> => {
   const connection = await asyncConn();
-  console.log(req.body.description);
+
   //create our story table intially
   try {
     const newTable = await connection.query(createStoryTable);
@@ -27,7 +27,7 @@ export const createStoryController = async (
       req.body.status_panel,
       req.body.board_id,
     ]);
-    console.log(rows, "inserted story");
+
     if (!rows) throw Error("Could not Create the document");
     return res.status(201).json(rows);
   } catch (error) {

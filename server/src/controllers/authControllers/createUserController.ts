@@ -38,14 +38,13 @@ const queryDB = async (req: Request, res: Response, queryArray: string[]) => {
     const dbResponse = await connection.query(createUserTable);
     if (!dbResponse)
       throw Error("There was no response from DB on Creating User");
-    console.log(dbResponse, "user table created successfully");
   } catch (error) {
     if (error instanceof Error) res.status(500).json(error.message);
   }
   //once we have created the table then we insert the user
   try {
     const result = await connection.query(addUser, queryArray);
-    console.log(result);
+
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof Error) {

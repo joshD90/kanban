@@ -3,19 +3,22 @@ import { useDrop } from "react-dnd";
 
 import PanelStory from "./PanelStory";
 import { Story, Board } from "../pages/SingleBoard";
+import { updatePanels } from "../utils/boardChanges/updatePanels";
+import React from "react";
 
 type Props = {
   setVis?: React.Dispatch<React.SetStateAction<any>>;
   board: Board;
+  setBoard: React.Dispatch<React.SetStateAction<any>>;
   panel: number;
 };
 
-const Panel: React.FC<Props> = ({ setVis, board, panel }) => {
+const Panel: React.FC<Props> = ({ setVis, board, panel, setBoard }) => {
   //set this component up to accept dropped components
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "story",
-    drop: () => {
-      console.log(panel, "PANEL accessing");
+    drop: (item: { id: number }) => {
+      updatePanels(setBoard, panel, item.id);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),

@@ -9,6 +9,7 @@ export const boardGetSingleController = async (
   res: Response
 ): Promise<Response> => {
   //need to do a check whether the user id matches our req.user.id and to see whether the board id matches boards belonging to user
+  console.log("this endpoint is getting hit");
   //can't search a board without an id
   if (!req.params.boardId)
     return res.status(400).json("No boards id to search");

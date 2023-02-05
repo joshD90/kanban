@@ -12,8 +12,10 @@ export const fetchSingleBoard = async (
       method: "GET",
       credentials: "include",
     });
+    console.log(response, "this is the response we should be getting");
     if (!response) throw Error("Could Not Find This Board");
     const data = await response.json();
+
     setBoard(data);
   } catch (error) {
     if (error instanceof Error) console.log(error.message);

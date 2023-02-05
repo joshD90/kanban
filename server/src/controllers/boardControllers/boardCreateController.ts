@@ -35,7 +35,7 @@ export const boardCreateController = async (
       req.body.headers.two,
       req.body.headers.three,
     ]);
-    console.log(rows.insertId, "board creation rows");
+
     if (!rows) res.status(500).json("could not create board");
     //this gets the [user id, board id] pairs to pass to our reference table
     const pairs = await getUserBoardPairs(
@@ -45,14 +45,14 @@ export const boardCreateController = async (
     );
     if (!pairs)
       throw Error("There was an error in referencing users and board");
-    console.log(pairs, "pairs to insert");
+
     //create our reference table if it hasnt been created yet
     const refResult = await connection.query(createBoardUserReference);
     if (!refResult)
       throw Error("Could not make a reference table for users and boards");
     //when we have created this table insert our pairs
     const [refRows] = await connection.query(addUserBoardRef, [pairs]);
-    console.log(refRows);
+
     //return created board, reftable
     res.status(201).json({
       board: rows,
@@ -71,14 +71,14 @@ const getUserBoardPairs = async (
   conn: Connection
 ): Promise<number[][] | null> => {
   const pairs: number[][] = [];
-  console.log(participants, "participants being passed through");
+
   try {
     //typescript doesnt have a connection type that returns a promise so we must assert it as any in this instance to call asyncronously
     const [rows]: { id: number }[][] | [] = await (conn as any).query(
       "SELECT id FROM users WHERE email IN (?)",
       [participants]
     );
-    console.log(rows, "rows in getuserboardpairs");
+
     if (!rows || rows.length === 0) return null;
     //create an array of array of our user id, board id number
     rows.forEach((row) => pairs.push([row.id, boardId]));

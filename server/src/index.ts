@@ -49,22 +49,19 @@ app.use(passport.session());
 
 //tell passport how to create the cookie
 passport.serializeUser((user: Express.User, done): void => {
-  console.log(user, "my user in serialize user");
   return done(null, user.email);
 });
 
 passport.deserializeUser(
   async (email: string | undefined, done): Promise<void> => {
-    console.log("DESERIALIZING");
-
     //connect to db
     const connection = await asyncConn();
     try {
       //find our user based on email and if they don't exist throw error
       const [rows] = await connection.query(getUser, [email]);
-      console.log(rows);
+
       if (!rows || rows.length === 0) return done(null, false);
-      console.log(rows, "rows");
+
       const user = {
         id: rows[0].id,
         email: rows[0].email,

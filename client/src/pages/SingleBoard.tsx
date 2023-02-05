@@ -32,6 +32,7 @@ const SingleBoard = () => {
   useEffect(() => {
     if (!Auth?.id || !boardId) return;
     const boardIdInt = parseInt(boardId);
+
     fetchSingleBoard(Auth.id, boardIdInt, setBoard);
   }, [boardId]);
 
@@ -45,9 +46,14 @@ const SingleBoard = () => {
       >
         {board && (
           <>
-            <Panel setVis={setCreateStoryVis} board={board} panel={1} />
-            <Panel board={board} panel={2} />
-            <Panel board={board} panel={3} />
+            <Panel
+              setVis={setCreateStoryVis}
+              board={board}
+              panel={1}
+              setBoard={setBoard}
+            />
+            <Panel board={board} setBoard={setBoard} panel={2} />
+            <Panel board={board} panel={3} setBoard={setBoard} />
           </>
         )}
       </div>
