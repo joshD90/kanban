@@ -29,7 +29,13 @@ export const createStoryController = async (
     ]);
 
     if (!rows) throw Error("Could not Create the document");
-    return res.status(201).json(rows);
+    console.log(rows.insertId, "rows");
+    const storyRows = await connection.query(
+      "SELECT * FROM stories WHERE id = ?",
+      [rows.insertId]
+    );
+    console.log(storyRows);
+    return res.status(201).json(storyRows[0]);
   } catch (error) {
     console.log(error);
     if (error instanceof Error) return res.status(500).json(error.message);

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { RowDataPacket } from "mysql2";
 
 import { asyncConn } from "../../db";
 import { getSingleBoard } from "../../queries/boardQueries";
@@ -19,11 +20,23 @@ export const boardGetSingleController = async (
 
     //if none can be found
     if (!rows) throw Error("Could not fetch any boards matching this id");
+    if (rows.length === 0)
+      return res.status(404).json("Could not find a board matching this id");
     //parse the stories section of our data as this has been stringified
-    const arrayedStories = JSON.parse(`[${rows[0]?.stories}]`);
-    const parsedBoard = { ...rows[0], stories: arrayedStories };
+    const { title, description, board_id, status_panel, ...boardProps } =
+      rows[0];
+    const boardWithStories = {
+      id: board_id,
+      ...boardProps,
+      stories: rows.map((row: RowDataPacket) => {
+        const { name, panel1, panel2, panel3, ...rest } = row;
 
-    return res.status(200).json(parsedBoard);
+        return { ...rest };
+      }),
+    };
+    console.log(boardWithStories);
+
+    return res.status(200).json(boardWithStories);
   } catch (error) {
     //type checking our error
     console.log(error);

@@ -1,5 +1,5 @@
 import React from "react";
-import { Board } from "../../pages/SingleBoard";
+import { Board, Story } from "../../pages/SingleBoard";
 import fetchUpdateStory from "../fetch/fetchUpdateStory";
 //this will update our stories to reflect the new panel that they are part of
 export const updatePanels = (
@@ -11,7 +11,9 @@ export const updatePanels = (
   setBoard((prev: Board) => {
     //remap the array of  stories held within prev
     const updatedStories = prev.stories?.map((story) => {
-      if (story.id === storyId) return { ...story, status_panel: panelNum };
+      if (story.id === storyId) {
+        return { ...story, status_panel: panelNum };
+      }
       return story;
     });
 

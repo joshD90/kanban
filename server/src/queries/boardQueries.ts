@@ -28,5 +28,8 @@ export const getAllUserBoards =
 // export const getSingleBoard =
 //   "SELECT boards.*, (SELECT JSON_ARRAYAGG(stories.*) FROM stories WHERE stories.board_id = boards.id ) as stories FROM boards WHERE boards.id = ?";
 
+// export const getSingleBoard =
+//   "SELECT boards.*, stories_for_board.stories FROM boards LEFT JOIN (SELECT board_id, id, JSON_OBJECT('id',id,'title',title,'description',description,'status_panel',status_panel) AS stories FROM stories GROUP BY board_id) AS stories_for_board ON stories_for_board.board_id = boards.id WHERE boards.id = ?";
+
 export const getSingleBoard =
-  "SELECT boards.*, stories_for_board.stories FROM boards LEFT JOIN (SELECT board_id, GROUP_CONCAT(JSON_OBJECT('id',id,'title',title,'description',description,'status_panel',status_panel)) AS stories FROM stories GROUP BY board_id) AS stories_for_board ON stories_for_board.board_id = boards.id WHERE boards.id = ?";
+  "SELECT * FROM boards LEFT JOIN stories ON boards.id = stories.board_id WHERE boards.id = ?";

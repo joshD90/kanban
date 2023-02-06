@@ -7,13 +7,20 @@ import { updatePanels } from "../utils/boardChanges/updatePanels";
 import React from "react";
 
 type Props = {
-  setVis?: React.Dispatch<React.SetStateAction<any>>;
+  setVis: React.Dispatch<React.SetStateAction<any>>;
   board: Board;
   setBoard: React.Dispatch<React.SetStateAction<any>>;
   panel: number;
+  setEditStory: React.Dispatch<React.SetStateAction<any>>;
 };
 
-const Panel: React.FC<Props> = ({ setVis, board, panel, setBoard }) => {
+const Panel: React.FC<Props> = ({
+  setVis,
+  board,
+  panel,
+  setBoard,
+  setEditStory,
+}) => {
   //set this component up to accept dropped components
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "story",
@@ -41,11 +48,18 @@ const Panel: React.FC<Props> = ({ setVis, board, panel, setBoard }) => {
           {board.stories?.map((story: Story) => {
             if (!story) return;
             if (story?.status_panel !== panel) return;
-            return <PanelStory story={story} key={story.id} />;
+            return (
+              <PanelStory
+                story={story}
+                key={story.id}
+                setVis={setVis}
+                setEditStory={setEditStory}
+              />
+            );
           })}
         </div>
       </div>
-      {setVis && (
+      {panel === 1 && (
         <div className="items-self-end w-full h-10 relative flex justify-end p-1">
           <div
             className="h-10 w-10 rounded-full bg-blue-500 text-stone-50 flex items-center justify-center cursor-pointer hover:bg-blue-400"

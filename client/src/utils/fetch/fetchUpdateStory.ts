@@ -9,7 +9,7 @@ type StoryUpdateDetails = {
 const fetchUpdateStory = async (
   storyId: number,
   storyDetails: StoryUpdateDetails
-): Promise<void> => {
+): Promise<boolean> => {
   const url = `${import.meta.env.VITE_BASE_URL}/stories/${storyId}`;
 
   try {
@@ -19,9 +19,11 @@ const fetchUpdateStory = async (
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
-    const data = await result.json();
+    if (result.ok) return true;
+    return false;
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 

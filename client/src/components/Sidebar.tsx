@@ -7,8 +7,6 @@ import fetchAllUserBoards from "../utils/fetch/fetchAllUserBoards";
 import { AuthContext } from "../context/authContext";
 import { Board } from "../utils/fetch/fetchAllUserBoards";
 
-const projects = ["project 1", "project 2", "project 3"];
-
 const Sidebar = () => {
   const user = useContext(AuthContext);
   const [boards, setBoards] = useState<Board[] | []>([]);

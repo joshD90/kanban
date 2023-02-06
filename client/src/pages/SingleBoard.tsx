@@ -27,6 +27,7 @@ const SingleBoard = () => {
   const Auth = useContext(AuthContext);
 
   const [createStoryVis, setCreateStoryVis] = useState(false);
+  const [editStory, setEditStory] = useState<Story | null>(null);
   const [board, setBoard] = useState<Board | null>(null);
   //get our board and all related stories
   useEffect(() => {
@@ -51,14 +52,33 @@ const SingleBoard = () => {
               board={board}
               panel={1}
               setBoard={setBoard}
+              setEditStory={setEditStory}
             />
-            <Panel board={board} setBoard={setBoard} panel={2} />
-            <Panel board={board} panel={3} setBoard={setBoard} />
+            <Panel
+              board={board}
+              setBoard={setBoard}
+              panel={2}
+              setVis={setCreateStoryVis}
+              setEditStory={setEditStory}
+            />
+            <Panel
+              board={board}
+              panel={3}
+              setBoard={setBoard}
+              setVis={setCreateStoryVis}
+              setEditStory={setEditStory}
+            />
           </>
         )}
       </div>
       {createStoryVis && boardId && (
-        <CreateStory setVis={setCreateStoryVis} board_id={parseInt(boardId)} />
+        <CreateStory
+          setVis={setCreateStoryVis}
+          setBoard={setBoard}
+          board_id={parseInt(boardId)}
+          editStory={editStory}
+          setEditStory={setEditStory}
+        />
       )}
     </div>
   );
