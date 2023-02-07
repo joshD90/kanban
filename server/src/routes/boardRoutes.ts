@@ -10,7 +10,7 @@ import { boardGetSingleController } from "../controllers/boardControllers/boardG
 const router = express.Router();
 
 router.post("/", boardCreateController);
-router.get("/:userId", boardGetAllController);
+router.get("/:userId", isLoggedIn, boardGetAllController);
 router.get("/:userId/:boardId", boardGetSingleController);
 
 export default router;

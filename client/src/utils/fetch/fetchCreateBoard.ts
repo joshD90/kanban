@@ -1,6 +1,8 @@
 import { Board } from "../../pages/CreateProject";
 
-export const fetchCreateBoard = async (details: Board): Promise<void> => {
+export const fetchCreateBoard = async (
+  details: Board
+): Promise<number | boolean> => {
   const url = `${import.meta.env.VITE_BASE_URL}/boards/`;
 
   try {
@@ -11,10 +13,13 @@ export const fetchCreateBoard = async (details: Board): Promise<void> => {
       body: JSON.stringify(details),
     });
 
-    if (response.status !== 201) throw Error(response.statusText);
+    if (!response.ok) throw Error(response.statusText);
     const data = await response.json();
+    //return the newly created board id so we can navigate to it on completion
+    return data.board.insertId;
   } catch (error) {
     console.log(error);
     if (error instanceof Error) console.log(error.message);
+    return false;
   }
 };

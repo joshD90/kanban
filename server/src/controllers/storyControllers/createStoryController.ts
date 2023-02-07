@@ -34,7 +34,6 @@ export const createStoryController = async (
       "SELECT * FROM stories WHERE id = ?",
       [rows.insertId]
     );
-    console.log(storyRows);
     return res.status(201).json(storyRows[0]);
   } catch (error) {
     console.log(error);

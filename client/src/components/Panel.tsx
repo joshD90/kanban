@@ -54,6 +54,7 @@ const Panel: React.FC<Props> = ({
                 key={story.id}
                 setVis={setVis}
                 setEditStory={setEditStory}
+                setBoard={setBoard}
               />
             );
           })}

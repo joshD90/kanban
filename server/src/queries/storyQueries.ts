@@ -10,3 +10,5 @@ export const updateStoryContent =
 
 export const updateStoryPanel =
   "UPDATE stories SET status_panel= ? WHERE id = ?";
+
+export const deleteStory = "DELETE FROM stories WHERE id = ?";

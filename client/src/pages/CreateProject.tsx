@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 
 import { AuthContext } from "../context/authContext";
@@ -23,6 +24,8 @@ const CreateProject = () => {
     participants: [...(user?.email ? [user?.email] : [])],
   });
 
+  const navigate = useNavigate();
+
   const changeBoardDetails = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setBoardDetails((prev) => ({ ...prev, name: e.target.value }));
   };
@@ -35,6 +38,11 @@ const CreateProject = () => {
     if (allFilledOut !== "true") return;
     allFilledOut;
     const response = await fetchCreateBoard(boardDetails);
+    if (!response)
+      return console.log(
+        "There was no response after creating the board. Try refreshing the page"
+      );
+    navigate(`/boards/${response}`);
   };
 
   const addHeader = (e: React.ChangeEvent<HTMLInputElement>): void => {
