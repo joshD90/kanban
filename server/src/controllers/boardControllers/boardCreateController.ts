@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { RowDataPacket, Connection } from "mysql2";
-import { asyncConn } from "../../db";
+import { promisePool } from "../../db";
 
 import {
   createBoardTable,
@@ -17,7 +17,7 @@ export const boardCreateController = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
-  const connection = await asyncConn();
+  const connection = promisePool;
   if (!connection) return res.status(500).json("Could not connect to the DB");
   //first make the board if it does not already Exist
   try {

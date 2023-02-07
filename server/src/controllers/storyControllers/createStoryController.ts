@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 
-import { asyncConn } from "../../db";
+import { promisePool } from "../../db";
 import { createStoryTable, addStory } from "../../queries/storyQueries";
 export const createStoryController = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const connection = await asyncConn();
+  const connection = promisePool;
 
   //create our story table intially
   try {

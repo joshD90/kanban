@@ -3,7 +3,7 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import bcrypt from "bcrypt";
 
-import { asyncConn } from "../db";
+import { promisePool } from "../db";
 import { getUser } from "../queries/authQueries";
 
 //this allows us to configure our local strategy into passport
@@ -16,7 +16,7 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, email, suppliedPassword, done): Promise<void> => {
-      const connection = await asyncConn();
+      const connection = promisePool;
       if (!connection) return done("Could not Connect To DB");
       try {
         //find out user by their email

@@ -11,6 +11,7 @@ export type Story = {
   title: string;
   description: string;
   status_panel: number;
+  board_id: number;
 };
 
 export type Board = {

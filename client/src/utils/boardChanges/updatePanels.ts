@@ -20,5 +20,6 @@ export const updatePanels = (
     //return the spread prev board with updated stories
     return { ...prev, stories: updatedStories };
   });
+  //when we only pass status_panel this will call a different mySQL than a full edit
   fetchUpdateStory(storyId, { status_panel: panelNum });
 };

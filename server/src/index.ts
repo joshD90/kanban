@@ -4,7 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import cors from "cors";
 
-import { asyncConn } from "./db";
+import { promisePool } from "./db";
 import { getUser } from "./queries/authQueries";
 
 import authRoutes from "./routes/authRoutes";
@@ -55,7 +55,7 @@ passport.serializeUser((user: Express.User, done): void => {
 passport.deserializeUser(
   async (email: string | undefined, done): Promise<void> => {
     //connect to db
-    const connection = await asyncConn();
+    const connection = promisePool;
     try {
       //find our user based on email and if they don't exist throw error
       const [rows] = await connection.query(getUser, [email]);

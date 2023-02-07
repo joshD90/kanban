@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { RowDataPacket } from "mysql2";
 
-import { asyncConn } from "../../db";
+import { promisePool } from "../../db";
 import { getSingleBoard } from "../../queries/boardQueries";
 
 //get a single board and any attached stories
@@ -14,7 +14,7 @@ export const boardGetSingleController = async (
   //can't search a board without an id
   if (!req.params.boardId)
     return res.status(400).json("No boards id to search");
-  const connection = await asyncConn();
+  const connection = promisePool;
   try {
     const [rows] = await connection.query(getSingleBoard, [req.params.boardId]);
 

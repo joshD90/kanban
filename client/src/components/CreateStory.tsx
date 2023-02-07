@@ -6,6 +6,7 @@ import fetchCreateStory from "../utils/fetch/fetchCreateStory";
 import { Story } from "../pages/SingleBoard";
 import fetchUpdateStory from "../utils/fetch/fetchUpdateStory";
 import { Board } from "../pages/SingleBoard";
+import updateStories from "../utils/boardChanges/updateStories";
 
 type Props = {
   setVis: React.Dispatch<React.SetStateAction<any>>;
@@ -15,9 +16,9 @@ type Props = {
   setEditStory: React.Dispatch<React.SetStateAction<any>>;
 };
 export type StoryDetails = {
-  title?: string;
-  description?: string;
-  status_panel?: number;
+  title: string;
+  description: string;
+  status_panel: number;
   board_id: number;
 };
 
@@ -28,10 +29,11 @@ const CreateStory: React.FC<Props> = ({
   editStory,
   setEditStory,
 }) => {
+  //if we are editing we pass in our pre-existing information or if we are creating it will be null
   const [storyDetails, setStoryDetails] = useState({
     title: editStory ? editStory.title : "",
     description: editStory ? editStory.description : "",
-    status_panel: editStory ? editStory.id : 1,
+    status_panel: editStory ? editStory.status_panel : 1,
     board_id: board_id,
   });
   //change our story details dynamically
@@ -42,28 +44,40 @@ const CreateStory: React.FC<Props> = ({
       return { ...prev, [e.target.id]: e.target.value };
     });
   };
-
+  //if we are creating a new story
   const createStory = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const shouldClose = await fetchCreateStory(storyDetails, setBoard);
+
+    //hide the form if we get a successful
     if (shouldClose) {
       setVis(false);
     }
   };
+
   //if we are passing an edit property
   const updateStory = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (!editStory) return;
     const success = await fetchUpdateStory(editStory.id, storyDetails);
     if (success) {
-      setBoard((prev: Board) => {
-        //we need to check if stories are undefined // or empty to satisfy our typescript
-        const updatedStories =
-          prev.stories?.length === 0 || prev.stories === undefined
-            ? [{ id: editStory.id, ...storyDetails }]
-            : [...prev.stories, { id: editStory.id, ...storyDetails }];
-        return { ...prev, stories: updatedStories };
-      });
+      updateStories(setBoard, editStory, storyDetails);
+      // {setBoard((prev: Board) => {
+      //   //we need to check if stories are undefined // or empty to satisfy our typescript
+      //   let updatedStories: Story[] | [];
+      //   if (prev.stories?.length === 0 || prev.stories === undefined) {
+      //     updatedStories = [{ id: editStory.id, ...storyDetails }];
+      //   } else {
+      //     const filteredStories = prev.stories.filter(
+      //       (story) => story.id !== editStory.id
+      //     );
+      //     updatedStories = [
+      //       ...filteredStories,
+      //       { id: editStory.id, ...storyDetails },
+      //     ];
+      //   }
+      //   return { ...prev, stories: updatedStories };
+      // });
       setVis(false);
       setEditStory(null);
     }
@@ -102,7 +116,7 @@ const CreateStory: React.FC<Props> = ({
             id="description"
             onChange={changeDetails}
             className="resize-none flex-grow p-2 border-2 border-stone-200 rounded-sm"
-            defaultValue={editStory?.title}
+            defaultValue={editStory?.description}
           ></textarea>
         </div>
         <button

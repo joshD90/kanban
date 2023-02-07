@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
-import { asyncConn } from "../../db";
+import { promisePool } from "../../db";
 import { createUserTable, addUser } from "../../queries/authQueries";
 //NB we need to add in a check to whether this uer exists already or not
 const createUserController = async (req: Request, res: Response) => {
@@ -30,7 +30,7 @@ const createUserController = async (req: Request, res: Response) => {
 
 //function for actually querying db
 const queryDB = async (req: Request, res: Response, queryArray: string[]) => {
-  const connection = await asyncConn();
+  const connection = promisePool;
   if (!connection) return res.status(500).json("could not connect to DB ");
   //create a new table if one didn't exist
   try {
