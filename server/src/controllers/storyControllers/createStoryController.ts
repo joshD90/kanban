@@ -11,7 +11,7 @@ export const createStoryController = async (
   //create our story table intially
   try {
     const newTable = await connection.query(createStoryTable);
-    console.log("new story table was created successfully");
+
     if (!newTable)
       return res.status(500).json("Could not create a new story Table");
   } catch (error) {
@@ -29,7 +29,7 @@ export const createStoryController = async (
     ]);
 
     if (!rows) throw Error("Could not Create the document");
-    console.log(rows.insertId, "rows");
+
     const storyRows = await connection.query(
       "SELECT * FROM stories WHERE id = ?",
       [rows.insertId]

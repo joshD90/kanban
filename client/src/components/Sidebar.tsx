@@ -6,6 +6,7 @@ import fetchAllUserBoards from "../utils/fetch/fetchAllUserBoards";
 
 import { AuthContext } from "../context/authContext";
 import { Board } from "../utils/fetch/fetchAllUserBoards";
+import { fetchUserLogout } from "../utils/fetch/fetchUserLogout";
 
 const Sidebar = () => {
   const user = useContext(AuthContext);
@@ -44,7 +45,10 @@ const Sidebar = () => {
           ))}
         </div>
         <div className="flex absolute bottom-0 w-full bg-stone-500 w-full justify-end text-stone-50 items-center p-2">
-          <button className="flex w-full justify-between">
+          <button
+            className="flex w-full justify-between"
+            onClick={() => fetchUserLogout(user.setUser)}
+          >
             Logout <LogoutIcon />
           </button>
         </div>

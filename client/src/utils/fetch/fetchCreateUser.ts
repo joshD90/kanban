@@ -11,6 +11,7 @@ export const fetchCreateUser = async (
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(details),
+      credentials: "include",
     });
     //we get the response of 201 if the user has been created return true so that our Login function
     //knows whether to redirect or give an error

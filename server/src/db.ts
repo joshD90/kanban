@@ -1,29 +1,12 @@
 import mysql from "mysql2";
-import mysqlPromise from "mysql2/promise";
+import config from "./config";
 //set up our connection config
-
-// export const connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "kanban",
-//   database: "kanban",
-//   password: process.env.DBPASSWORD,
-// });
-
-// export const asyncConn = async (): Promise<any> => {
-//   const db = await mysqlPromise.createConnection({
-//     host: "localhost",
-//     user: "kanban",
-//     database: "kanban",
-//     password: process.env.DBPASSWORD,
-//   });
-//   return db;
-// };
 
 const pool = mysql.createPool({
   host: "localhost",
   user: "kanban",
   database: "kanban",
-  password: process.env.DBPASSWORD,
+  password: config.db.password,
   connectionLimit: 10,
   waitForConnections: true,
 });

@@ -8,7 +8,7 @@ export const deleteStoryController = async (
   res: Response
 ): Promise<Response> => {
   const connection = promisePool;
-  console.log(req.params.storyId);
+
   if (!req.params.storyId)
     //malformed request
     return res.status(400).json("Could not delete as Id was not present");
