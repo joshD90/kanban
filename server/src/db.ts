@@ -3,7 +3,7 @@ import config from "./config";
 //set up our connection config
 
 const pool = mysql.createPool({
-  host: "localhost",
+  host: "127.0.0.1",
   user: "kanban",
   database: "kanban",
   password: config.db.password,

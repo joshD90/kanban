@@ -27,6 +27,6 @@ app.use("/auth", authRoutes);
 app.use("/boards", boardRoutes);
 app.use("/stories", storyRoutes);
 
-app.listen(5000, () => {
-  console.log("server is listening on port 5000");
+app.listen(6000, () => {
+  console.log("server is listening on port 6000");
 });

@@ -20,7 +20,7 @@ const Login = () => {
       return setError("You need to enter both Email and Password");
     //user is updated in our fetchlogin function but we get the returned boolean to see whether
     //we should redirect on its completion
-    const outcome = await fetchLogin(loginDetails, user);
+    const outcome = await fetchLogin(loginDetails, user, setError);
     //clear our state of sensitive data
     setLoginDetails({ email: "", password: "" });
     if (outcome) navigate("/");
@@ -55,6 +55,7 @@ const Login = () => {
               id="email"
               placeholder="The email you used to sign up"
               className="p-1 border-none rounded-sm w-full"
+              value={loginDetails.email}
             />
           </div>
           <div className="flex flex-col w-full">
@@ -65,6 +66,7 @@ const Login = () => {
               id="password"
               placeholder="Your Password Here"
               className="p-1 border-none rounded-sm w-full"
+              value={loginDetails.password}
             />
           </div>
           <button

@@ -10,7 +10,7 @@ import HomeButton from "./HomeButton";
 const ProtectedRoute = () => {
   //get our user from AuthContext
   const auth = useContext(AuthContext);
-  console.log(auth);
+
   //redirect to login page if no user is found
   if (!auth?.isLoggedIn) return <Navigate to="/login" replace />;
 

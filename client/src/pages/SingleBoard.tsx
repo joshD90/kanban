@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
 import CreateStory from "../components/CreateStory";
@@ -26,6 +26,7 @@ export type Board = {
 const SingleBoard = () => {
   const { boardId } = useParams();
   const Auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [createStoryVis, setCreateStoryVis] = useState(false);
   const [editStory, setEditStory] = useState<Story | null>(null);
@@ -35,7 +36,7 @@ const SingleBoard = () => {
     if (!Auth?.id || !boardId) return;
     const boardIdInt = parseInt(boardId);
 
-    fetchSingleBoard(Auth.id, boardIdInt, setBoard);
+    fetchSingleBoard(Auth.id, boardIdInt, setBoard, navigate);
   }, [boardId]);
 
   return (

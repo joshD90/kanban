@@ -5,7 +5,7 @@ import fetchCreateStory from "../utils/fetch/fetchCreateStory";
 
 import { Story } from "../pages/SingleBoard";
 import fetchUpdateStory from "../utils/fetch/fetchUpdateStory";
-import { Board } from "../pages/SingleBoard";
+
 import updateStories from "../utils/boardChanges/updateStories";
 
 type Props = {
@@ -62,22 +62,7 @@ const CreateStory: React.FC<Props> = ({
     const success = await fetchUpdateStory(editStory.id, storyDetails);
     if (success) {
       updateStories(setBoard, editStory, storyDetails);
-      // {setBoard((prev: Board) => {
-      //   //we need to check if stories are undefined // or empty to satisfy our typescript
-      //   let updatedStories: Story[] | [];
-      //   if (prev.stories?.length === 0 || prev.stories === undefined) {
-      //     updatedStories = [{ id: editStory.id, ...storyDetails }];
-      //   } else {
-      //     const filteredStories = prev.stories.filter(
-      //       (story) => story.id !== editStory.id
-      //     );
-      //     updatedStories = [
-      //       ...filteredStories,
-      //       { id: editStory.id, ...storyDetails },
-      //     ];
-      //   }
-      //   return { ...prev, stories: updatedStories };
-      // });
+
       setVis(false);
       setEditStory(null);
     }

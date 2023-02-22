@@ -41,7 +41,7 @@ export const AuthContextProvider = (props: { children?: ReactNode }) => {
           setUser(userInitialState);
           setLoading(false);
         }
-        console.log(userData, "USER DATA BEING RETURNED");
+
         setUser(userData);
         setLoading(false);
       } catch (error) {
